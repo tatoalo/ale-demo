@@ -12,6 +12,8 @@ class Settings:
     app_name: str
     database_path: str
     conversations_token: str
+    shop_user: str
+    shop_password: str
 
     @classmethod
     def from_env(cls) -> "Settings":
@@ -24,6 +26,8 @@ class Settings:
             app_name=os.environ.get("APP_NAME", "Hog Supply Co."),
             database_path=os.environ.get("DATABASE_PATH", "data/shop.db"),
             conversations_token=os.environ.get("POSTHOG_CONVERSATIONS_TOKEN", ""),
+            shop_user=os.environ.get("SHOP_USER", "hog"),
+            shop_password=os.environ.get("SHOP_PASSWORD", ""),
         )
 
 

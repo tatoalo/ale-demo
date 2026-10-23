@@ -2,10 +2,13 @@
 autocapture and the assistant all see traffic before a live audience arrives.
 
     pip install playwright && playwright install chromium
-    python scripts/traffic.py --base-url https://ale-demo.fly.dev --sessions 20
+    SHOP_PASSWORD=... python scripts/traffic.py --base-url https://ale-demo.fly.dev --sessions 20
+
+SHOP_USER / SHOP_PASSWORD are the shop's basic auth credentials; leave them unset when the shop is open.
 """
 
 import argparse
+import os
 import random
 import time
 
@@ -34,9 +37,16 @@ QUESTIONS = [
 ]
 
 
+def credentials() -> dict | None:
+    password = os.environ.get("SHOP_PASSWORD")
+    return {"username": os.environ.get("SHOP_USER", "hog"), "password": password} if password else None
+
+
 def one_session(browser, base_url: str, rng: random.Random) -> None:
     context = browser.new_context(
-        viewport={"width": rng.choice([1280, 1440, 390]), "height": 900}, user_agent=rng.choice(USER_AGENTS)
+        viewport={"width": rng.choice([1280, 1440, 390]), "height": 900},
+        user_agent=rng.choice(USER_AGENTS),
+        http_credentials=credentials(),
     )
     context.add_init_script(HIDE_AUTOMATION)
     page = context.new_page()

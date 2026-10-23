@@ -31,10 +31,14 @@ Each fault is a PostHog feature flag, off by default. Switch one on in PostHog, 
 | `fault-cart-js-error` | Add to cart throws in the browser. Exception autocapture with a replay. |
 | `assistant-enabled` | Not a fault. Hides the assistant when off. |
 
+## Access
+
+Set `SHOP_PASSWORD` (and optionally `SHOP_USER`, default `hog`) to put the whole shop behind HTTP basic auth, so the assistant does not spend LLM credit between demos. Leave it unset to open the shop. `/healthz` is always open.
+
 ## Traffic
 
 `scripts/traffic.py` drives shopper sessions through headless Chromium against any base URL.
 
 ## Deploy
 
-`fly.toml` and the `Dockerfile` deploy to Fly.io. Set `POSTHOG_API_KEY`, `LLM_API_KEY`, `LLM_BASE_URL` and `LLM_MODEL` as Fly secrets.
+`fly.toml` and the `Dockerfile` deploy to Fly.io. Set `POSTHOG_API_KEY`, `LLM_API_KEY`, `LLM_BASE_URL`, `LLM_MODEL` and `SHOP_PASSWORD` as Fly secrets.

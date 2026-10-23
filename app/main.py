@@ -10,11 +10,13 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
 from app import assistant, catalog, store
+from app.auth import BasicAuthMiddleware
 from app.analytics import FAULT_CHECKOUT_500, FAULT_SLOW_CATALOG, flag_on, flags_for_client, posthog
 from app.config import settings
 
 BASE = Path(__file__).parent
 app = FastAPI(title=settings.app_name)
+app.add_middleware(BasicAuthMiddleware)
 app.mount("/static", StaticFiles(directory=BASE / "static"), name="static")
 templates = Jinja2Templates(directory=BASE / "templates")
 templates.env.filters["price"] = catalog.format_price
