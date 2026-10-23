@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}{{ product.name }} · {{ settings.app_name }}{% endblock %}
+{% block content %}
+<article class="detail">
+  <div class="thumb big" aria-hidden="true">{{ product.emoji }}</div>
+  <div>
+    <p class="crumb"><a href="/">Shop</a> / {{ product.category }}</p>
+    <h1>{{ product.name }}</h1>
+    <p class="blurb">{{ product.blurb }}</p>
+    <p class="price">{{ product.price_cents | price }}</p>
+    <form hx-post="/cart/add" hx-target="#cart-button" hx-swap="outerHTML" class="add-form">
+      <input type="hidden" name="slug" value="{{ product.slug }}">
+      <button type="submit" data-attr="add-to-cart" data-slug="{{ product.slug }}">Add to cart</button>
+    </form>
+  </div>
+</article>
+{% endblock %}

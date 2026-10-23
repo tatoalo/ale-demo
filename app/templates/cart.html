@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Cart · {{ settings.app_name }}{% endblock %}
+{% block content %}
+<h1>Your cart</h1>
+{% if items %}
+<table class="cart">
+  <thead><tr><th>Item</th><th>Qty</th><th>Price</th><th></th></tr></thead>
+  <tbody>
+  {% for p, qty in items %}
+  <tr>
+    <td><a href="/p/{{ p.slug }}">{{ p.emoji }} {{ p.name }}</a></td>
+    <td>{{ qty }}</td>
+    <td>{{ (p.price_cents * qty) | price }}</td>
+    <td><form method="post" action="/cart/remove"><input type="hidden" name="slug" value="{{ p.slug }}"><button class="link" type="submit">Remove</button></form></td>
+  </tr>
+  {% endfor %}
+  </tbody>
+  <tfoot><tr><td colspan="2">Total</td><td colspan="2">{{ total | price }}</td></tr></tfoot>
+</table>
+<a class="button" href="/checkout" data-attr="go-to-checkout">Checkout</a>
+{% else %}
+<p class="empty">Your cart is empty. <a href="/">Back to the shop</a>.</p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,26 @@
+app = "ale-demo"
+primary_region = "ams"
+
+[build]
+
+[env]
+  PORT = "8080"
+  POSTHOG_HOST = "https://us.i.posthog.com"
+  APP_NAME = "Hog Supply Co."
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = "stop"
+  auto_start_machines = true
+  min_machines_running = 1
+
+[[http_service.checks]]
+  interval = "30s"
+  timeout = "5s"
+  method = "GET"
+  path = "/healthz"
+
+[mounts]
+  source = "shop_data"
+  destination = "/data"

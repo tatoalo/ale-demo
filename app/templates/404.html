@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block title %}Not found · {{ settings.app_name }}{% endblock %}
+{% block content %}
+<section class="hero">
+  <h1>No product called "{{ slug }}"</h1>
+  <p><a href="/">Back to the shop</a>.</p>
+</section>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Checkout · {{ settings.app_name }}{% endblock %}
+{% block content %}
+<h1>Checkout</h1>
+{% if items %}
+<div class="checkout">
+  <form method="post" action="/checkout" class="stack">
+    <label>Email <input type="email" name="email" required placeholder="you@example.com"></label>
+    <label>Card number <input inputmode="numeric" value="4242 4242 4242 4242" readonly></label>
+    <p class="hint">Test checkout. No card is charged.</p>
+    <button type="submit" data-attr="pay">Pay {{ total | price }}</button>
+  </form>
+  <ul class="summary">
+    {% for p, qty in items %}<li>{{ qty }} × {{ p.name }} <span>{{ (p.price_cents * qty) | price }}</span></li>{% endfor %}
+  </ul>
+</div>
+{% else %}
+<p class="empty">Nothing to pay for. <a href="/">Back to the shop</a>.</p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="hero">
+  <h1>Merch for people who ship.</h1>
+  <p>Eight products, one assistant, and a lot of telemetry.</p>
+</section>
+<section class="grid">
+  {% for p in products %}
+  <article class="card">
+    <a href="/p/{{ p.slug }}" class="thumb" aria-hidden="true">{{ p.emoji }}</a>
+    <h3><a href="/p/{{ p.slug }}">{{ p.name }}</a></h3>
+    <p class="blurb">{{ p.blurb }}</p>
+    <div class="row">
+      <span class="price">{{ p.price_cents | price }}</span>
+      <form hx-post="/cart/add" hx-target="#cart-button" hx-swap="outerHTML" class="add-form">
+        <input type="hidden" name="slug" value="{{ p.slug }}">
+        <button type="submit" data-attr="add-to-cart" data-slug="{{ p.slug }}">Add to cart</button>
+      </form>
+    </div>
+  </article>
+  {% else %}
+  <p class="empty">Nothing matches "{{ query }}". Try "mug" or "hoodie".</p>
+  {% endfor %}
+</section>
+{% endblock %}

@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}Order placed · {{ settings.app_name }}{% endblock %}
+{% block content %}
+<section class="hero">
+  <h1>Order {{ order_id }} placed</h1>
+  <p>{{ total | price }} not charged. A hedgehog will not ship it.</p>
+  <a class="button" href="/">Keep shopping</a>
+</section>
+{% endblock %}

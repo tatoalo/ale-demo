@@ -1,0 +1,37 @@
+:root { --bg: #fbfaf5; --fg: #1d1a17; --muted: #6b665c; --line: #e6e1d3; --accent: #f54e00; --card: #fff; --radius: 8px; font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif; }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--fg); line-height: 1.5; }
+a { color: inherit; }
+header.top { display: flex; align-items: center; gap: 20px; padding: 14px 24px; border-bottom: 1px solid var(--line); background: var(--card); position: sticky; top: 0; }
+.brand { font-weight: 700; text-decoration: none; font-size: 18px; white-space: nowrap; }
+.search { flex: 1; } .search input { width: 100%; max-width: 420px; padding: 8px 12px; border: 1px solid var(--line); border-radius: var(--radius); font: inherit; }
+nav a { text-decoration: none; font-weight: 600; padding: 8px 12px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--card); }
+main { max-width: 1040px; margin: 0 auto; padding: 24px; }
+.hero { padding: 24px 0 12px; } .hero h1 { margin: 0 0 4px; font-size: 32px; letter-spacing: -0.02em; } .hero p { margin: 0 0 12px; color: var(--muted); }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; margin-top: 16px; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px; display: flex; flex-direction: column; gap: 6px; }
+.card h3 { margin: 0; font-size: 16px; } .card h3 a { text-decoration: none; }
+.thumb { display: grid; place-items: center; height: 120px; font-size: 56px; background: #f3efe3; border-radius: var(--radius); text-decoration: none; }
+.thumb.big { height: 260px; font-size: 120px; }
+.blurb { color: var(--muted); font-size: 14px; margin: 0; flex: 1; }
+.row { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.price { font-weight: 700; }
+button, .button { font: inherit; font-weight: 600; background: var(--accent); color: #fff; border: 0; border-radius: var(--radius); padding: 8px 14px; cursor: pointer; text-decoration: none; display: inline-block; box-shadow: 0 3px 0 #b83a00; }
+button:active, .button:active { transform: translateY(2px); box-shadow: 0 1px 0 #b83a00; }
+button.link { background: none; color: var(--muted); box-shadow: none; padding: 0; text-decoration: underline; font-weight: 400; }
+.detail { display: grid; grid-template-columns: minmax(200px, 320px) 1fr; gap: 28px; align-items: start; }
+.crumb { color: var(--muted); font-size: 13px; } .crumb a { text-decoration: none; }
+table.cart { width: 100%; border-collapse: collapse; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; margin-bottom: 16px; }
+table.cart th, table.cart td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--line); } table.cart tfoot td { font-weight: 700; border: 0; }
+.checkout { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+.stack { display: grid; gap: 12px; } .stack label { display: grid; gap: 4px; font-size: 14px; font-weight: 600; } .stack input { font: inherit; padding: 8px 12px; border: 1px solid var(--line); border-radius: var(--radius); }
+.hint { color: var(--muted); font-size: 13px; margin: 0; }
+.summary { list-style: none; margin: 0; padding: 0; } .summary li { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--line); }
+.empty { color: var(--muted); }
+.assistant { position: fixed; right: 20px; bottom: 20px; width: min(360px, calc(100vw - 40px)); background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px; box-shadow: 0 10px 30px rgba(0,0,0,.08); }
+.assistant h2 { margin: 0 0 8px; font-size: 15px; }
+.assistant form { display: flex; gap: 6px; margin-top: 8px; } .assistant input { flex: 1; font: inherit; padding: 8px 10px; border: 1px solid var(--line); border-radius: var(--radius); }
+#assistant-log { max-height: 240px; overflow-y: auto; display: grid; gap: 8px; }
+.turn .q { margin: 0; font-size: 13px; color: var(--muted); } .turn .a { margin: 2px 0 0; font-size: 14px; background: #f3efe3; padding: 8px 10px; border-radius: var(--radius); } .turn .a.error { background: #fde8de; color: #8a2b00; }
+footer { text-align: center; color: var(--muted); font-size: 13px; padding: 40px 24px 120px; }
+@media (max-width: 700px) { .detail, .checkout { grid-template-columns: 1fr; } header.top { flex-wrap: wrap; } }
