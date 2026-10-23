@@ -1,6 +1,8 @@
+import json
 import time
 import uuid
 from pathlib import Path
+from urllib.parse import unquote
 
 from fastapi import FastAPI, Form, Request
 from fastapi.responses import HTMLResponse, RedirectResponse
@@ -29,13 +31,34 @@ def cart_id_of(request: Request) -> str:
     return request.cookies.get(CART_COOKIE) or uuid.uuid4().hex
 
 
+def posthog_cookie(request: Request) -> dict:
+    """posthog-js persists its distinct id and session in a cookie, which full-page loads carry but HTMX headers do not."""
+    raw = request.cookies.get(f"ph_{settings.posthog_api_key}_posthog")
+    if not raw:
+        return {}
+    try:
+        return json.loads(unquote(raw))
+    except ValueError:
+        return {}
+
+
 def distinct_id_of(request: Request) -> str:
-    # posthog-js sends its distinct id on every request so server events join the same person.
-    return request.headers.get("x-posthog-distinct-id") or request.cookies.get(CART_COOKIE) or "anonymous"
+    # HTMX requests send the distinct id as a header; plain navigations fall back to the posthog-js cookie,
+    # so every server event joins the same person as the browser's events.
+    return (
+        request.headers.get("x-posthog-distinct-id")
+        or posthog_cookie(request).get("distinct_id")
+        or request.cookies.get(CART_COOKIE)
+        or "anonymous"
+    )
 
 
 def session_id_of(request: Request) -> str | None:
-    return request.headers.get("x-posthog-session-id")
+    header = request.headers.get("x-posthog-session-id")
+    if header:
+        return header
+    sesid = posthog_cookie(request).get("$sesid")
+    return sesid[1] if isinstance(sesid, list) and len(sesid) > 1 and sesid[1] else None
 
 
 def capture(request: Request, event: str, **properties) -> None:
