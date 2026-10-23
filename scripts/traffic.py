@@ -11,6 +11,20 @@ import time
 
 from playwright.sync_api import sync_playwright
 
+# posthog-js drops events from anything that looks like a bot: a HeadlessChrome user agent, a HeadlessChrome
+# client-hint brand (navigator.userAgentData), or navigator.webdriver. Each session hides all three so the
+# traffic is captured like a real shopper's.
+HIDE_AUTOMATION = (
+    "Object.defineProperty(navigator, 'webdriver', {get: () => undefined});"
+    "Object.defineProperty(navigator, 'userAgentData', {get: () => undefined});"
+)
+USER_AGENTS = [
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 14_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Safari/605.1.15",
+    "Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1",
+]
+
 QUESTIONS = [
     "What goes well with cold brew?",
     "Do you have anything warm?",
@@ -21,7 +35,10 @@ QUESTIONS = [
 
 
 def one_session(browser, base_url: str, rng: random.Random) -> None:
-    context = browser.new_context(viewport={"width": rng.choice([1280, 1440, 390]), "height": 900})
+    context = browser.new_context(
+        viewport={"width": rng.choice([1280, 1440, 390]), "height": 900}, user_agent=rng.choice(USER_AGENTS)
+    )
+    context.add_init_script(HIDE_AUTOMATION)
     page = context.new_page()
     page.goto(base_url, wait_until="networkidle")
     time.sleep(rng.uniform(1, 3))
@@ -45,7 +62,7 @@ def one_session(browser, base_url: str, rng: random.Random) -> None:
                 page.fill("input[name=email]", f"shopper{rng.randrange(10_000)}@example.com")
                 page.click("button[data-attr=pay]")
                 page.wait_for_load_state("networkidle")
-    time.sleep(rng.uniform(1, 2))
+    time.sleep(rng.uniform(4, 6))  # let posthog-js flush its event batch and the replay buffer
     context.close()
 
 
